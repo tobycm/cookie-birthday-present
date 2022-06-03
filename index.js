@@ -6,7 +6,9 @@ const ele = document.querySelector('#text');
 
 const css_import = document.querySelector('#css-import');
 
-timer = setInterval(randomFont(ele, font_families, css_import), 2500);
+setInterval(() => {
+    randomFont(ele, font_families, css_import)
+}, 2500);
 
 function randomFont(ele, font_families, css_import) {
     let child = ele.lastElementChild;
@@ -23,13 +25,37 @@ function randomFont(ele, font_families, css_import) {
 
     for (var i = 0; i < text.length; i++) {
         let span = document.createElement('span');
-        let link = document.createElement('link');
-        var item = font_families[Math.floor(Math.random() * font_families.length)];
-        link.href = "https://fonts.googleapis.com/css?family=" + item;
-        link.rel = "stylesheet";
-        css_import.appendChild(link);
         span.innerHTML = text[i];
-        span.style.fontFamily = item;
-        ele.appendChild(span);
+        if (text[i] === ' ') {
+            ele.appendChild(span);
+        } else {
+            let link = document.createElement('link');
+            var item = font_families[Math.floor(Math.random() * font_families.length)];
+            link.href = "https://fonts.googleapis.com/css?family=" + item + "&text=" + text[i];
+            link.rel = "stylesheet";
+            css_import.appendChild(link);
+            span.style.fontFamily = item;
+            ele.appendChild(span);
+        }
     }
+}
+
+function getFontFamilies() {
+    const ele = document.querySelector('#text');
+    const temp = ele.children;
+    var chars = [];
+    for (var i = 0; i < temp.length; i++) {
+        if (temp[i].innerHTML !== ' ') {
+            chars.push(temp[i]);
+        }
+    }
+    var input = document.querySelector('#text-input');
+
+    input = parseInt(input.value) - 1;
+    const char = chars[input];
+
+    console.log(char);
+
+    const font_display = document.querySelector('#font-display');
+    font_display.innerHTML = char.style.fontFamily;
 }
